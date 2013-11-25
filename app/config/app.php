@@ -114,6 +114,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
+		'Cartalyst\Sentry\Laravel\SentryServiceProvider',
+
 	),
 
 	/*
@@ -178,6 +180,11 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+
+		'Activation'    => 'Cartalyst\Sentry\Laravel\Facades\Activation',
+		'Auth'          => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
+		'Sentry'        => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
+		'SwiftIdentity' => 'Cartalyst\Sentry\Laravel\Facades\SwiftIdentity',
 
 	),
 

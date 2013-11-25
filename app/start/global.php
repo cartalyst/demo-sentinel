@@ -17,6 +17,7 @@ ClassLoader::addDirectories(array(
 	app_path().'/controllers',
 	app_path().'/models',
 	app_path().'/database/seeds',
+	app_path().'/swift',
 
 ));
 
@@ -47,6 +48,71 @@ Log::useDailyFiles(storage_path().'/logs/'.$logFile);
 | shown, which includes a detailed stack trace during debug.
 |
 */
+
+App::error(function(Cartalyst\Sentry\Checkpoints\NotActivatedException $exception, $code)
+{
+	return Redirect::to('wait')
+		->withErrors($exception->getMessage());
+});
+
+App::error(function(Cartalyst\Sentry\Checkpoints\SwiftIdentityException $exception, $code)
+{
+	$code = $exception->getCode();
+	$response = $exception->getResponse();
+	$user = $exception->getUser();
+
+	switch ($code)
+	{
+		case NEED_REGISTER_SMS:
+			return Redirect::to('swift/sms/register')
+				->withInput();
+
+		case NEED_REGISTER_SWIPE:
+			return Redirect::to('swift/swipe/register')
+				->withInput()
+				->with('swipe_login', $user->getUserLogin())
+				->with('swipe_code', $response->getUserSwipeActivationCode());
+
+		case RC_SWIPE_REJECTED:
+			return Redirect::to('login')
+				->withErrors('Swift Identity authentication rejected by device.');
+			break;
+
+		case RC_SMS_DELIVERED:
+			return Redirect::to('swift/sms/code')
+				->withInput();
+
+		case RC_ERROR:
+		case RC_APP_DOES_NOT_EXIST:
+			return Redirect::to('login')
+				->withErrors($e->getMessage());
+	}
+
+	dd($message);
+});
+
+App::error(function(Cartalyst\Sentry\Checkpoints\ThrottlingException $exception, $code)
+{
+	$free = $exception->getFree()->format('d M, h:i:s a');
+
+	switch ($exception->getType())
+	{
+		case 'global':
+			$message = "Our site appears to be spammed. To give eveything a chance to calm down, please try again after {$free}.";
+			break;
+
+		case 'ip':
+			$message = "Too many unauthorized attemps have been made against your IP address. Please wait until {$free} before trying again.";
+			break;
+
+		case 'user':
+			$message = "Too many unauthorized attemps have been made against your account. For your security, your account is locked until {$free}.";
+			break;
+	}
+
+	return Redirect::to('login')
+		->withErrors($message);
+});
 
 App::error(function(Exception $exception, $code)
 {
