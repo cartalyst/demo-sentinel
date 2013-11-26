@@ -183,6 +183,7 @@ return array(
 
 		'Activation'    => 'Cartalyst\Sentry\Laravel\Facades\Activation',
 		'Auth'          => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
+		'Reminder'      => 'Cartalyst\Sentry\Laravel\Facades\Reminder',
 		'Sentry'        => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
 		'SwiftIdentity' => 'Cartalyst\Sentry\Laravel\Facades\SwiftIdentity',
 

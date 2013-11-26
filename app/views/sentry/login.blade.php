@@ -41,6 +41,7 @@ Login
 			<div class="col-sm-8 col-sm-push-4">
 				{{ Form::submit('Login', ['class' => 'btn btn-lg btn-primary']) }}
 				{{ Form::reset('Reset', ['class' => 'btn btn-default']) }}
+				<a href="{{ URL::to('reset') }}">Forgot password?</a>
 			</div>
 		</div>
 

@@ -133,6 +133,95 @@ Route::post('login', function()
 	return Redirect::intended('account');
 });
 
+Route::get('reset', function()
+{
+	return View::make('sentry.reset.begin');
+});
+
+Route::post('reset', function()
+{
+	$rules = [
+		'email' => 'required|email',
+	];
+
+	$validator = Validator::make(Input::get(), $rules);
+
+	if ($validator->fails())
+	{
+		return Redirect::back()
+			->withInput()
+			->withErrors($validator);
+	}
+
+	$email = Input::get('email');
+
+	$user = Sentry::findByCredentials(compact('email'));
+
+	if ( ! $user)
+	{
+		return Redirect::back()
+			->withInput()
+			->withErrors('No user with that email address belongs in our system.');
+	}
+
+	$code = Reminder::create($user);
+
+	$sent = Mail::send('sentry.emails.reminder', compact('user', 'code'), function($m) use ($user)
+	{
+		$m->to($user->email)->subject('Activate Your Account');
+	});
+
+	if ( ! $sent)
+	{
+		return Redirect::to('register')
+			->withErrors('Failed to send reset password email.');
+	}
+
+	return Redirect::to('wait');
+});
+
+Route::get('reset/{id}/{code}', function($id, $code)
+{
+	$user = Sentry::findById($id);
+
+	return View::make('sentry.reset.complete');
+
+})->where('id', '\d+');
+
+Route::post('reset/{id}/{code}', function($id, $code)
+{
+	$rules = [
+		'password' => 'required|confirmed',
+	];
+
+	$validator = Validator::make(Input::get(), $rules);
+
+	if ($validator->fails())
+	{
+		return Redirect::back()
+			->withInput()
+			->withErrors($validator);
+	}
+
+	$user = Sentry::findById($id);
+
+	if ( ! $user)
+	{
+		return Redirect::back()
+			->withInput()
+			->withErrors('The user no longer exists.');
+	}
+
+	if ( ! Reminder::complete($user, $code, Input::get('password')))
+	{
+		return Redirect::to('login')
+			->with('Invalid or expired reset code.');
+	}
+
+	return Redirect::to('login');
+
+})->where('id', '\d+');
+
 Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 {
 	Route::get('/', function()
@@ -147,7 +236,7 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 	{
 		$user = Sentry::getUser();
 		$user->removePersistenceCode($code);
-		$user->savePersistenceCodes();
+		$user->save();
 
 		return Redirect::back();
 	});

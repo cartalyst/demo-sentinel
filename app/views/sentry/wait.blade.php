@@ -13,7 +13,7 @@ Please Wait
 	</div>
 
 	<p>
-		Very shortly, you will receive an email with instructions on how to activate your account.
+		Very shortly, you will receive an email with instructions on how to continue.
 	</p>
 
 </div>
