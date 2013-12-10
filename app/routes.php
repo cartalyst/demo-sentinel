@@ -34,7 +34,7 @@ Route::get('register', function()
 Route::post('register', function()
 {
 	$rules = [
-		'email' => 'required|email',
+		'email' => 'required|email|exists:users',
 		'password' => 'required|confirmed',
 	];
 
