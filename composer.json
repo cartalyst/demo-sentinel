@@ -4,8 +4,9 @@
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
 	"require": {
-		"laravel/framework": "4.0.*",
-		"cartalyst/sentry": "dev-develop"
+		"cartalyst/sentry": "dev-develop",
+		"doctrine/dbal": "2.5.*",
+		"laravel/framework": "4.1.*"
 	},
 	"autoload": {
 		"classmap": [
