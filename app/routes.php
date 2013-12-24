@@ -23,7 +23,7 @@ DB::listen(function($sql, array $bindings)
 
 Route::get('/', function()
 {
-	return View::make('hello');
+	return View::make('sentry/index');
 });
 
 Route::get('register', function()
@@ -33,27 +33,24 @@ Route::get('register', function()
 
 Route::post('register', function()
 {
-	$rules = [
-		'email' => 'required|email|unique:users',
-		'password' => 'required|confirmed',
-	];
+	$rules = array(
+		'email'            => 'required|email|unique:users',
+		'password'         => 'required',
+		'password_confirm' => 'required|same:password',
+	);
 
 	$validator = Validator::make(Input::get(), $rules);
 
 	if ($validator->fails())
 	{
-		return Redirect::back()
-			->withInput()
-			->withErrors($validator);
+		return Redirect::back()->withInput()->withErrors($validator);
 	}
 
 	$user = Sentry::register(Input::get());
 
 	if ( ! $user)
 	{
-		return Redirect::to('register')
-			->withInput()
-			->withErrors('Failed to register.');
+		return Redirect::to('register')->withInput()->withErrors('Failed to register.');
 	}
 
 	$code = Activation::create($user);
@@ -76,7 +73,7 @@ Route::get('activate/{id}/{code}', function($id, $code)
 			->withErrors('Invalid or expired activation code.');
 	}
 
-	return Redirect::to('login');
+	return Redirect::to('login')->withSuccess('Account activated.');
 })->where('id', '\d+');
 
 Route::get('reactivate/{id}/{code}', function($id, $code)
@@ -90,8 +87,7 @@ Route::get('reactivate/{id}/{code}', function($id, $code)
 
 	if ( ! $sent)
 	{
-		return Redirect::to('register')
-			->withErrors('Failed to send activation email.');
+		return Redirect::to('register')->withErrors('Failed to send activation email.');
 	}
 
 	return Redirect::to('wait');
