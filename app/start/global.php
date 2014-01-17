@@ -17,7 +17,7 @@ ClassLoader::addDirectories(array(
 	app_path().'/controllers',
 	app_path().'/models',
 	app_path().'/database/seeds',
-	app_path().'/swift',
+	app_path().'/swipe',
 
 ));
 
@@ -53,7 +53,7 @@ App::error(function(Cartalyst\Sentry\Checkpoints\NotActivatedException $exceptio
 		->withErrors($exception->getMessage());
 });
 
-App::error(function(Cartalyst\Sentry\Checkpoints\SwiftIdentityException $exception, $code)
+App::error(function(Cartalyst\Sentry\Checkpoints\SwipeIdentityException $exception, $code)
 {
 	$code = $exception->getCode();
 	$response = $exception->getResponse();
@@ -62,22 +62,22 @@ App::error(function(Cartalyst\Sentry\Checkpoints\SwiftIdentityException $excepti
 	switch ($code)
 	{
 		case NEED_REGISTER_SMS:
-			return Redirect::to('swift/sms/register')
+			return Redirect::to('swipe/sms/register')
 				->withInput();
 
 		case NEED_REGISTER_SWIPE:
-			return Redirect::to('swift/swipe/register')
+			return Redirect::to('swipe/register')
 				->withInput()
 				->with('swipe_login', $user->getUserLogin())
 				->with('swipe_code', $response->getUserSwipeActivationCode());
 
 		case RC_SWIPE_REJECTED:
 			return Redirect::to('login')
-				->withErrors('Swift Identity authentication rejected by device.');
+				->withErrors('Swipe Identity authentication rejected by device.');
 			break;
 
 		case RC_SMS_DELIVERED:
-			return Redirect::to('swift/sms/code')
+			return Redirect::to('swipe/sms/code')
 				->withInput();
 
 		case RC_ERROR:

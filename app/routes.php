@@ -11,15 +11,6 @@
 |
 */
 
-DB::listen(function($sql, array $bindings)
-{
-	foreach ($bindings as $binding)
-	{
-		$sql = preg_replace('/\?/', '"'.$binding.'"', $sql, 1);
-	}
-
-	// var_dump($sql);
-});
 
 Route::get('/', function()
 {
@@ -46,9 +37,7 @@ Route::post('register', function()
 		return Redirect::back()->withInput()->withErrors($validator);
 	}
 
-	$user = Sentry::register(Input::get());
-
-	if ( ! $user)
+	if ( ! $user = Sentry::register(Input::get()))
 	{
 		return Redirect::to('register')->withInput()->withErrors('Failed to register.');
 	}
@@ -239,50 +228,47 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 
 });
 
-Route::group(['prefix' => 'swift'], function()
+Route::group(['prefix' => 'swipe'], function()
 {
-	Route::group(['prefix' => 'swipe'], function()
+	Route::get('register', function()
 	{
-		Route::get('register', function()
+		$login = Session::get('login');
+		$code = Session::get('code');
+
+		if ( ! $login or ! $code)
 		{
-			$login = Session::get('login');
-			$code = Session::get('code');
+			return Redirect::to('login')
+				->withErrors('Missing Swipe Identity swipe login or code.');
+		}
 
-			if ( ! $login or ! $code)
-			{
-				return Redirect::to('login')
-					->withErrors('Missing Swift Identity swipe login or code.');
-			}
+		Session::reflash();
 
-			Session::reflash();
+		return View::make('sentry.swipe.register', compact('login', 'code'));
+	});
 
-			return View::make('sentry.swift.swipe.register', compact('login', 'code'));
-		});
+	Route::get('registered', function()
+	{
+		$email = Input::old('email');
+		$password = Input::old('password');
 
-		Route::get('registered', function()
+		if ( ! $email or ! $password)
 		{
-			$email = Input::old('email');
-			$password = Input::old('password');
+			return Redirect::to('email')
+				->withErrors('Email or password have disappeared from the session.');
+		}
 
-			if ( ! $email or ! $password)
-			{
-				return Redirect::to('email')
-					->withErrors('Email or password have disappeared from the session.');
-			}
+		Session::reflash();
 
-			Session::reflash();
+		$user = Sentry::authenticate(compact('email', 'password'));
 
-			$user = Sentry::authenticate(compact('email', 'password'));
+		if ( ! $user)
+		{
+			return Redirect::to('login')
+				->withInput()
+				->withErrors('Login failed even after swipe was registered. Potential infinite loop.');
+		}
 
-			if ( ! $user)
-			{
-				return Redirect::to('login')
-					->withInput()
-					->withErrors('Login failed even after swipe was registered. Potential infinite loop.');
-			}
-
-			return Redirect::to('account');
-		});
+		return Redirect::to('account');
 	});
 
 	Route::group(['prefix' => 'sms'], function()
@@ -300,7 +286,7 @@ Route::group(['prefix' => 'swift'], function()
 
 			Session::reflash();
 
-			return View::make('sentry.swift.sms.register');
+			return View::make('sentry.swipe.sms.register');
 		});
 
 		Route::post('register', function()
@@ -337,12 +323,12 @@ Route::group(['prefix' => 'swift'], function()
 					->withErrors('User in session does not exist.');
 			}
 
-			$response = SwiftIdentity::saveNumber($user, Input::get('number'));
+			$response = SwipeIdentity::saveNumber($user, Input::get('number'));
 
 			if ( ! $response)
 			{
 				return Redirect::to('login')
-					->withErrors('Failed to send number to Swift Identity.');
+					->withErrors('Failed to send number to Swipe Identity.');
 			}
 
 			// We should expect another exception
@@ -366,7 +352,7 @@ Route::group(['prefix' => 'swift'], function()
 
 			Session::reflash();
 
-			return View::make('sentry.swift.sms.code');
+			return View::make('sentry.swipe.sms.code');
 		});
 
 		Route::post('code', function()
@@ -403,7 +389,7 @@ Route::group(['prefix' => 'swift'], function()
 					->withErrors('User in session does not exist.');
 			}
 
-			$user = SwiftIdentity::checkAnswer($user, Input::get('code'), function($user)
+			$user = SwipeIdentity::checkAnswer($user, Input::get('code'), function($user)
 			{
 				return Sentry::authenticate($user, (bool) Input::old('remember', false));
 			});
