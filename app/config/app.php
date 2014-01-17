@@ -179,7 +179,7 @@ return array(
 		'Auth'          => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
 		'Reminder'      => 'Cartalyst\Sentry\Laravel\Facades\Reminder',
 		'Sentry'        => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
-		'SwiftIdentity' => 'Cartalyst\Sentry\Laravel\Facades\SwiftIdentity',
+		'SwipeIdentity' => 'Cartalyst\Sentry\Laravel\Facades\SwipeIdentity',
 
 	),
 
