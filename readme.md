@@ -12,7 +12,7 @@ git clone git@github.com:cartalyst/demo-sentry.git
 
 ##### 2. Setup your virtual host.
 
-##### 3. Go into the directory in your terminal app and install the dependencies:
+##### 3. Go into your app directory in your terminal and install the dependencies:
 
 ```
 composer install
