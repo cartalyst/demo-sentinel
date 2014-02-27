@@ -41,25 +41,38 @@
 					<div class="collapse navbar-collapse">
 						<ul class="nav navbar-nav">
 							<li{{ Request::is('/') ? ' class="active"' : null }}><a href="{{ URL::to('/') }}">Home</a></li>
+							@if ( ! Sentry::check())
 							<li{{ Request::is('login') ? ' class="active"' : null }}><a href="{{ URL::to('login') }}">Login</a></li>
 							<li{{ Request::is('register') ? ' class="active"' : null }}><a href="{{ URL::to('register') }}">Register</a></li>
+							@else
+							<li{{ Request::is('users*') ? ' class="active"' : null }}><a href="{{ URL::to('users') }}">Users</a></li>
+							<li{{ Request::is('groups*') ? ' class="active"' : null }}><a href="{{ URL::to('groups') }}">Groups</a></li>
+							@endif
 						</ul>
 					</div>
 				</div>
 
 			</div>
 
-			@if (count($errors) > 0)
-			<div class="alert alert-danger">
-				<strong>Error</strong> Please check the form below for errors.
-			</div>
+			@if ($errors->any())
+				<div class="alert alert-danger alert-block">
+					<button type="button" class="close" data-dismiss="alert"><i class="fa fa-minus-square"></i></button>
+					<strong>Error</strong>
+					@if ($message = $errors->first(0, ':message'))
+						{{ $message }}
+					@else
+						Please check the form below for errors
+					@endif
+				</div>
 			@endif
 
 			@if ($message = Session::get('success'))
-			<div class="alert alert-success alert-block">
-				<strong>Success</strong> {{ $message }}
-			</div>
+				<div class="alert alert-success alert-block">
+					<button type="button" class="close" data-dismiss="alert"><i class="fa fa-minus-square"></i></button>
+					<strong>Success</strong> {{ $message }}
+				</div>
 			@endif
+
 
 			@yield('body')
 

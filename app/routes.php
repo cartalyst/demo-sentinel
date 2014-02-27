@@ -12,40 +12,38 @@
 */
 
 
+Route::group(array('prefix' => 'groups'), function()
+{
+	Route::get('/', 'GroupsController@index');
+	Route::get('create', 'GroupsController@create');
+	Route::post('create', 'GroupsController@store');
+	Route::get('{id}', 'GroupsController@edit');
+	Route::post('{id}', 'GroupsController@update');
+	Route::get('{id}/delete', 'GroupsController@delete');
+});
+
+Route::group(array('prefix' => 'users'), function()
+{
+	Route::get('/', 'UsersController@index');
+	Route::get('create', 'UsersController@create');
+	Route::post('create', 'UsersController@store');
+	Route::get('{id}', 'UsersController@edit');
+	Route::post('{id}', 'UsersController@update');
+	Route::get('{id}/delete', 'UsersController@delete');
+});
+
 Route::get('/', function()
 {
 	return View::make('sentry/index');
 });
 
-Route::get('register', function()
-{
-	return View::make('sentry/register');
-});
+Route::get('login', 'AuthController@login');
+Route::post('login', 'AuthController@processLogin');
 
-Route::post('register', function()
-{
-	$rules = array(
-		'email'            => 'required|email|unique:users',
-		'password'         => 'required',
-		'password_confirm' => 'required|same:password',
-	);
+Route::get('register', 'AuthController@register');
+Route::post('register', 'AuthController@processRegistration');
 
-	$validator = Validator::make(Input::get(), $rules);
 
-	if ($validator->fails())
-	{
-		return Redirect::back()->withInput()->withErrors($validator);
-	}
-
-	if ( ! $user = Sentry::register(Input::get()))
-	{
-		return Redirect::to('register')->withInput()->withErrors('Failed to register.');
-	}
-
-	$code = Activation::create($user);
-
-	return Redirect::to("reactivate/{$user->getUserId()}/{$code}");
-});
 
 Route::get('wait', function()
 {
@@ -82,41 +80,6 @@ Route::get('reactivate/{id}/{code}', function($id, $code)
 	return Redirect::to('wait');
 
 })->where('id', '\d+');
-
-Route::get('login', function()
-{
-	return View::make('sentry.login');
-});
-
-Route::post('login', function()
-{
-	$rules = [
-		'email' => 'required|email',
-		'password' => 'required',
-	];
-
-	$validator = Validator::make(Input::get(), $rules);
-
-	if ($validator->fails())
-	{
-		return Redirect::back()
-			->withInput()
-			->withErrors($validator);
-	}
-
-	$method = (Input::get('remember')) ? 'authenticateAndRemember' : 'authenticate';
-
-	$user = Sentry::authenticate(Input::except(['_token', 'remember']), (bool) Input::get('remember', false));
-
-	if ( ! $user)
-	{
-		return Redirect::back()
-			->withInput()
-			->withErrors('Invalid login or password.');
-	}
-
-	return Redirect::intended('account');
-});
 
 Route::get('reset', function()
 {
