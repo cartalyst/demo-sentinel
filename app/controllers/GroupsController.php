@@ -122,7 +122,7 @@ class GroupsController extends AuthController {
 	 * @param  int     $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
-	protected function processForm($mode, $id)
+	protected function processForm($mode, $id = null)
 	{
 		$input = Input::all();
 
