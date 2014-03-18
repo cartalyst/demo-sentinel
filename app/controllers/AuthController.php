@@ -24,12 +24,14 @@ class AuthController extends BaseController {
 	{
 		try
 		{
-			$rules = array(
+			$input = Input::all();
+
+			$rules = [
 				'email'    => 'required|email',
 				'password' => 'required',
-			);
+			];
 
-			$validator = Validator::make(Input::get(), $rules);
+			$validator = Validator::make($input, $rules);
 
 			if ($validator->fails())
 			{
@@ -76,20 +78,22 @@ class AuthController extends BaseController {
 	 */
 	public function processRegistration()
 	{
-		$rules = array(
+		$input = Input::all();
+
+		$rules = [
 			'email'            => 'required|email|unique:users',
 			'password'         => 'required',
 			'password_confirm' => 'required|same:password',
-		);
+		];
 
-		$validator = Validator::make(Input::get(), $rules);
+		$validator = Validator::make($input, $rules);
 
 		if ($validator->fails())
 		{
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
 
-		if ($user = Sentry::register(Input::get()))
+		if ($user = Sentry::register($input))
 		{
 			$code = Activation::create($user);
 

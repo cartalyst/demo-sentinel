@@ -11,8 +11,14 @@
 |
 */
 
+Route::get('logout', function()
+{
+	Sentry::logout();
 
-Route::group(array('prefix' => 'groups'), function()
+	return Redirect::to('/');
+});
+
+Route::group(['prefix' => 'groups'], function()
 {
 	Route::get('/', 'GroupsController@index');
 	Route::get('create', 'GroupsController@create');
@@ -22,7 +28,7 @@ Route::group(array('prefix' => 'groups'), function()
 	Route::get('{id}/delete', 'GroupsController@delete');
 });
 
-Route::group(array('prefix' => 'users'), function()
+Route::group(['prefix' => 'users'], function()
 {
 	Route::get('/', 'UsersController@index');
 	Route::get('create', 'UsersController@create');
@@ -169,6 +175,7 @@ Route::post('reset/{id}/{code}', function($id, $code)
 	return Redirect::to('login');
 
 })->where('id', '\d+');
+
 
 Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 {

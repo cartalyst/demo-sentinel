@@ -1,13 +1,13 @@
 <?php
 
-class GroupsController extends AuthorizedController {
+class UsersController extends AuthorizedController {
 
 	/**
-	 * Holds the Sentry Groups repository.
+	 * Holds the Sentry Users repository.
 	 *
-	 * @var \Cartalyst\Sentry\Groups\EloquentGroup
+	 * @var \Cartalyst\Sentry\Users\EloquentUser
 	 */
-	protected $groups;
+	protected $users;
 
 	/**
 	 * Constructor.
@@ -18,23 +18,23 @@ class GroupsController extends AuthorizedController {
 	{
 		parent::__construct();
 
-		$this->groups = Sentry::getGroupRepository()->createModel();
+		$this->users = Sentry::getUserRepository();
 	}
 
 	/**
-	 * Display a listing of groups.
+	 * Display a listing of users.
 	 *
 	 * @return \Illuminate\View\View
 	 */
 	public function index()
 	{
-		$groups = $this->groups->paginate();
+		$users = $this->users->createModel()->paginate();
 
-		return View::make('sentry.groups.index', compact('groups'));
+		return View::make('sentry.users.index', compact('users'));
 	}
 
 	/**
-	 * Show the form for creating new group.
+	 * Show the form for creating new user.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -44,7 +44,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Handle posting of the form for creating new group.
+	 * Handle posting of the form for creating new user.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -54,7 +54,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Show the form for updating group.
+	 * Show the form for updating user.
 	 *
 	 * @param  int  $id
 	 * @return mixed
@@ -65,7 +65,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Handle posting of the form for updating group.
+	 * Handle posting of the form for updating user.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
@@ -76,21 +76,21 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Remove the specified group.
+	 * Remove the specified user.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
-		if ($group = $this->groups->find($id))
+		if ($user = $this->users->createModel()->find($id))
 		{
-			$group->delete();
+			$user->delete();
 
-			return Redirect::to('groups');
+			return Redirect::to('users');
 		}
 
-		return Redirect::to('groups');
+		return Redirect::to('users');
 	}
 
 	/**
@@ -104,17 +104,17 @@ class GroupsController extends AuthorizedController {
 	{
 		if ($id)
 		{
-			if ( ! $group = $this->groups->find($id))
+			if ( ! $user = $this->users->createModel()->find($id))
 			{
-				return Redirect::to('groups');
+				return Redirect::to('users');
 			}
 		}
 		else
 		{
-			$group = $this->groups;
+			$user = $this->users->createModel();
 		}
 
-		return View::make('sentry.groups.form', compact('mode', 'group'));
+		return View::make('sentry.users.form', compact('mode', 'user'));
 	}
 
 	/**
@@ -126,54 +126,57 @@ class GroupsController extends AuthorizedController {
 	 */
 	protected function processForm($mode, $id = null)
 	{
-		$input = Input::all();
+		$input = array_filter(Input::all());
 
 		$rules = [
-			'name' => 'required',
-			'slug' => 'required|unique:groups'
+			'first_name' => 'required',
+			'last_name'  => 'required',
+			'email'      => 'required|unique:users'
 		];
 
 		if ($id)
 		{
-			$group = $this->groups->find($id);
+			$user = $this->users->createModel()->find($id);
 
-			$rules['slug'] .= ",slug,{$group->slug},slug";
+			$rules['email'] .= ",email,{$user->email},email";
 
-			$messages = $this->validateGroup($input, $rules);
+			$messages = $this->validateUser($input, $rules);
 
 			if ($messages->isEmpty())
 			{
-				$group->fill($input);
-
-				$group->save();
+				$this->users->update($user, $input);
 			}
 		}
 		else
 		{
-			$messages = $this->validateGroup($input, $rules);
+			$messages = $this->validateUser($input, $rules);
 
 			if ($messages->isEmpty())
 			{
-				$group = $this->groups->create($input);
+				$user = $this->users->create($input);
+
+				$code = Activation::create($user);
+
+				Activation::complete($user, $code);
 			}
 		}
 
 		if ($messages->isEmpty())
 		{
-			return Redirect::to('groups');
+			return Redirect::to('users');
 		}
 
 		return Redirect::back()->withInput()->withErrors($messages);
 	}
 
 	/**
-	 * Validates a group.
+	 * Validates a user.
 	 *
 	 * @param  array  $data
 	 * @param  mixed  $id
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	protected function validateGroup($data, $rules)
+	protected function validateUser($data, $rules)
 	{
 		$validator = Validator::make($data, $rules);
 
