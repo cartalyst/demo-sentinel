@@ -6,8 +6,6 @@ My Account
 
 @section('body')
 
-<div class="container">
-
 	<div class="page-header">
 		<h1>My Account</h1>
 	</div>
@@ -36,8 +34,20 @@ My Account
 
 			{{ Carbon\Carbon::now() }}
 		</div>
-	</div>
 
-</div>
+		<div class="col-md-6">
+			<h3>Activation</h3>
+
+			@if ($user->isActivated())
+
+				<a class="btn btn-danger" href="{{ URL::to('deactivate') }}">Deactivate</a>
+
+			@else
+
+				<a class="btn btn-default" href="{{ URL::to('reactivate') }}">Activate</a>
+
+			@endif
+		</div>
+
 
 @stop

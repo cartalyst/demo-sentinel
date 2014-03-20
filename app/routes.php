@@ -62,16 +62,23 @@ Route::get('activate/{id}/{code}', function($id, $code)
 
 	if ( ! Activation::complete($user, $code))
 	{
-		return Redirect::to("reactivate/{$user->getUserId()}/{$code}")
+		return Redirect::to("login")
 			->withErrors('Invalid or expired activation code.');
 	}
 
 	return Redirect::to('login')->withSuccess('Account activated.');
 })->where('id', '\d+');
 
-Route::get('reactivate/{id}/{code}', function($id, $code)
+Route::get('reactivate', function()
 {
-	$user = Sentry::findById($id);
+	if ( ! $user = Sentry::check())
+	{
+		return Redirect::to('login');
+	}
+
+	$activation = Activation::exists($user) ?: Activation::create($user);
+
+	$code = $activation->code;
 
 	$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
 	{
@@ -84,8 +91,16 @@ Route::get('reactivate/{id}/{code}', function($id, $code)
 	}
 
 	return Redirect::to('wait');
-
 })->where('id', '\d+');
+
+Route::get('deactivate', function()
+{
+	$user = Sentry::check();
+
+	Activation::remove($user);
+
+	return Redirect::back();
+});
 
 Route::get('reset', function()
 {
@@ -118,7 +133,9 @@ Route::post('reset', function()
 			->withErrors('No user with that email address belongs in our system.');
 	}
 
-	$code = Reminder::create($user);
+	$reminder = Reminder::exists($user) ?: Reminder::create($user);
+
+	$code = $reminder->code;
 
 	$sent = Mail::send('sentry.emails.reminder', compact('user', 'code'), function($m) use ($user)
 	{
@@ -169,22 +186,28 @@ Route::post('reset/{id}/{code}', function($id, $code)
 	if ( ! Reminder::complete($user, $code, Input::get('password')))
 	{
 		return Redirect::to('login')
-			->with('Invalid or expired reset code.');
+			->withErrors('Invalid or expired reset code.');
 	}
 
-	return Redirect::to('login');
+	return Redirect::to('login')->withSuccess("Password Reset.");
 
 })->where('id', '\d+');
 
-
 Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 {
+
 	Route::get('/', function()
 	{
 		$user = Sentry::getUser();
 		$persistence = Sentry::getPersistence();
+		$activationCode = '';
 
-		return View::make('sentry.account.home', compact('user', 'persistence'));
+		if ( ! $user->isActivated())
+		{
+			$activationCode = Activation::exists($user);
+		}
+
+		return View::make('sentry.account.home', compact('user', 'persistence', 'activationCode'));
 	});
 
 	Route::get('kill/{code}', function($code)

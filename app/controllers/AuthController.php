@@ -97,7 +97,17 @@ class AuthController extends BaseController {
 		{
 			$code = Activation::create($user);
 
-			return Redirect::to("reactivate/{$user->getUserId()}/{$code}");
+			$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
+			{
+				$m->to($user->email)->subject('Activate Your Account');
+			});
+
+			if ( ! $sent)
+			{
+				return Redirect::to('register')->withErrors('Failed to send activation email.');
+			}
+
+			return Redirect::to("login")->withSuccess('An activation email has been sent.')->with('userId', $user->getUserId());
 		}
 
 		return Redirect::to('register')->withInput()->withErrors('Failed to register.');

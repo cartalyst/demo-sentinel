@@ -49,9 +49,13 @@
 							<li{{ Request::is('groups*') ? ' class="active"' : null }}><a href="{{ URL::to('groups') }}">Groups</a></li>
 							@endif
 						</ul>
-						@if (Sentry::check())
+						@if ($user = Sentry::check())
 						<ul class="nav navbar-nav pull-right">
-							<li{{ Request::is('account') ? ' class="active"' : null }}><a href="{{ URL::to('account') }}">Account</a></li>
+							<li{{ Request::is('account') ? ' class="active"' : null }}><a href="{{ URL::to('account') }}">Account
+							@if ( ! $user->isActivated())
+								<span class="label label-danger">Inactive</span>
+							@endif
+							</a></li>
 							<li><a href="{{ URL::to('logout') }}">Logout</a></li>
 						</ul>
 						@endif
