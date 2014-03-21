@@ -11,12 +11,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/cartalyst/sentry.git",
-                "reference": "069084ccbb1142b0e7588e01d9a49a4f89745bb4"
+                "reference": "ff4885ffa373047a7487ab540d35aeb7983c48d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cartalyst/sentry/zipball/069084ccbb1142b0e7588e01d9a49a4f89745bb4",
-                "reference": "069084ccbb1142b0e7588e01d9a49a4f89745bb4",
+                "url": "https://api.github.com/repos/cartalyst/sentry/zipball/ff4885ffa373047a7487ab540d35aeb7983c48d9",
+                "reference": "ff4885ffa373047a7487ab540d35aeb7983c48d9",
                 "shasum": ""
             },
             "require": {
@@ -93,7 +93,7 @@
                 "laravel",
                 "security"
             ],
-            "time": "2014-03-18 17:17:06"
+            "time": "2014-03-21 16:11:18"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -806,12 +806,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "fd10d47a9dc31f266cc1e7b1dba040675e2c76f6"
+                "reference": "9948ff88c494345384da83ea083db3455f6fb831"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/fd10d47a9dc31f266cc1e7b1dba040675e2c76f6",
-                "reference": "fd10d47a9dc31f266cc1e7b1dba040675e2c76f6",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/9948ff88c494345384da83ea083db3455f6fb831",
+                "reference": "9948ff88c494345384da83ea083db3455f6fb831",
                 "shasum": ""
             },
             "require": {
@@ -915,7 +915,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-03-18 15:22:59"
+            "time": "2014-03-21 03:18:46"
         },
         {
             "name": "machuga/authority",
@@ -1958,12 +1958,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "2b803c45c454751c503a7d4f15fce4aa4a9e4686"
+                "reference": "635e262ce02bf3e562163328ba674aef632a286e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/2b803c45c454751c503a7d4f15fce4aa4a9e4686",
-                "reference": "2b803c45c454751c503a7d4f15fce4aa4a9e4686",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/635e262ce02bf3e562163328ba674aef632a286e",
+                "reference": "635e262ce02bf3e562163328ba674aef632a286e",
                 "shasum": ""
             },
             "require": {
@@ -2022,7 +2022,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "http://symfony.com",
-            "time": "2014-03-04 17:06:29"
+            "time": "2014-03-12 18:29:58"
         },
         {
             "name": "symfony/process",
