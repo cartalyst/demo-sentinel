@@ -96,7 +96,7 @@ return array(
 	|
 	*/
 
-	'cookie' => 'laravel_session',
+	'cookie' => 'demo_sentry_session',
 
 	/*
 	|--------------------------------------------------------------------------
