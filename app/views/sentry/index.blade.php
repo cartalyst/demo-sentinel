@@ -22,11 +22,11 @@
 	<ul class="list list-unstyled">
 		<li>Allow for custom hashing strategies.</li>
 		<li>Refactor permissions out into a driver-based system.</li>
-		<li>Refactor `*Provider` and `*Interface` implementations into single `*Repository` classes, stripping methods and simplifying where possible.</li>
+		<li>Refactor *Provider and *Interface implementations into single *Repository classes, stripping methods and simplifying where possible.</li>
 		<li>Multiple sessions.</li>
 		<li>Multiple login columns.</li>
 		<li>Inter-account throttling and improved DDoS protection.</li>
-		<li>Improved integration with Laravel (`Sentry::basic()`, easy email integration with queues).</li>
+		<li>Improved integration with Laravel (Sentry::basic(), easy email integration with queues).</li>
 		<li>Improved speed - make use of eager loading.</li>
 		<li>Allow use of implementations (such as Eloquent and Kohana ORM) to take place on the ORM level, without bloating Sentry with abstractions never used by Sentry.</li>
 		<li>Add support for two factor authentication.</li>
