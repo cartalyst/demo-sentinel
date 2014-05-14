@@ -1,0 +1,90 @@
+/*
+ * Globals
+ */
+
+ .flux {
+  position: absolute;
+  top:0;
+  left:0;
+  right:0;
+  border-bottom:4px solid #2d3337;
+ }
+
+.flux--1 {
+  background-color:#0F1C28;
+  width:10%;
+  float:left;
+  height:8px;
+}
+.flux--2 {
+  background-color:#136972;
+  width:30%;
+  float:left;
+  height:8px;
+}
+.flux--3 {
+  background-color:#67BFA7;
+  width:44%;
+  float:left;
+  height:8px;
+}
+.flux--4 {
+  background-color:#F3CF5B;
+  width:8%;
+  float:left;
+  height:8px;
+}
+.flux--5 {
+  background-color:#F07444;
+  width:8%;
+  float:left;
+  height:8px;
+}
+
+/* Links */
+a,
+a:focus,
+a:hover {
+  color: #136972;
+}
+
+/* Custom default button */
+.btn-default,
+.btn-default:hover,
+.btn-default:focus {
+  color: #fff;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #2d3337;
+  border: 1px solid #fff;
+}
+
+/*
+ * Base structure
+ */
+
+ html,
+ body {
+  height: 100%;
+  background-color: #fff;
+}
+body {
+  color: #2d3337;
+  text-align: left;
+  padding-top:32px;
+}
+
+
+/*
+ * Header
+ */
+ .page-header {
+  text-align: center;
+}
+
+
+
+@media (min-width: 992px) {
+  .lead {
+    font-size:28px;
+  }
+}
