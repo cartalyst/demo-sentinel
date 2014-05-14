@@ -5,7 +5,6 @@
 	"license": "MIT",
 	"require": {
 		"cartalyst/sentry": "dev-develop",
-		"doctrine/dbal": "2.5.*",
 		"laravel/framework": "4.1.*"
 	},
 	"autoload": {

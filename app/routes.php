@@ -11,6 +11,9 @@
 |
 */
 
+// Disable checkpoints (throttling, activation) for demo purposes
+Sentry::disableCheckpoints();
+
 Route::get('logout', function()
 {
 	Sentry::logout();
@@ -40,6 +43,11 @@ Route::group(['prefix' => 'users'], function()
 
 Route::get('/', function()
 {
+	if (Sentry::check())
+	{
+		return Redirect::to('account');
+	}
+
 	return View::make('sentry/index');
 });
 
@@ -48,8 +56,6 @@ Route::post('login', 'AuthController@processLogin');
 
 Route::get('register', 'AuthController@register');
 Route::post('register', 'AuthController@processRegistration');
-
-
 
 Route::get('wait', function()
 {
@@ -78,6 +84,11 @@ Route::get('reactivate', function()
 
 	$activation = Activation::exists($user) ?: Activation::create($user);
 
+	// This is used for the demo, usually you would want
+	// to activate the account through the link you
+	// receive in the activation email
+	Activation::complete($user, $activation->code);
+
 	$code = $activation->code;
 
 	$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
@@ -90,7 +101,7 @@ Route::get('reactivate', function()
 		return Redirect::to('register')->withErrors('Failed to send activation email.');
 	}
 
-	return Redirect::to('wait');
+	return Redirect::to('account');
 })->where('id', '\d+');
 
 Route::get('deactivate', function()
@@ -199,15 +210,10 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 	Route::get('/', function()
 	{
 		$user = Sentry::getUser();
+
 		$persistence = Sentry::getPersistence();
-		$activationCode = '';
 
-		if ( ! $user->isActivated())
-		{
-			$activationCode = Activation::exists($user);
-		}
-
-		return View::make('sentry.account.home', compact('user', 'persistence', 'activationCode'));
+		return View::make('sentry.account.home', compact('user', 'persistence'));
 	});
 
 	Route::get('kill/{code}', function($code)
@@ -252,7 +258,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 		Session::reflash();
 
-		$user = Sentry::authenticate(compact('email', 'password'));
+		$user = Sentry::forceAuthenticateAndRemember(compact('email', 'password'));
 
 		if ( ! $user)
 		{
@@ -325,7 +331,7 @@ Route::group(['prefix' => 'swipe'], function()
 			}
 
 			// We should expect another exception
-			Sentry::authenticate(compact('email', 'password'));
+			Sentry::forceAuthenticateAndRemember(compact('email', 'password'));
 
 			// We should never get here
 			return Redirect::to('login')
@@ -384,7 +390,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 			$user = SwipeIdentity::checkAnswer($user, Input::get('code'), function($user)
 			{
-				return Sentry::authenticate($user, (bool) Input::old('remember', false));
+				return Sentry::forceAuthenticateAndRemember($user, (bool) Input::old('remember', false));
 			});
 
 			if ( ! $user)

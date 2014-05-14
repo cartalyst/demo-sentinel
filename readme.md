@@ -21,6 +21,7 @@ composer install
 ##### 4. Configure your database connection by opening `app/config/database.php` file.
 
 ##### 5. Update the `app/config/mail.php` file to use your email credentials.
+>**Note:** make sure you set `pretend` to false after you configure your email credentials.
 
 ##### 6. Run the migrations
 

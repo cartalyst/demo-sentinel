@@ -38,7 +38,7 @@ My Account
 		<div class="col-md-6">
 			<h3>Activation</h3>
 
-			@if ($user->isActivated())
+			@if (Activation::completed($user))
 
 				<a class="btn btn-danger" href="{{ URL::to('deactivate') }}">Deactivate</a>
 

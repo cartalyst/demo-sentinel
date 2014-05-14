@@ -52,7 +52,7 @@
 						@if ($user = Sentry::check())
 						<ul class="nav navbar-nav pull-right">
 							<li{{ Request::is('account') ? ' class="active"' : null }}><a href="{{ URL::to('account') }}">Account
-							@if ( ! $user->isActivated())
+							@if ( ! Activation::completed($user))
 								<span class="label label-danger">Inactive</span>
 							@endif
 							</a></li>

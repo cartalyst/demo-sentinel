@@ -97,7 +97,9 @@ class AuthController extends BaseController {
 		{
 			$activation = Activation::create($user);
 
-			$sent = Mail::send('sentry.emails.activate', compact('user', 'activation'), function($m) use ($user)
+			$code = $activation->code;
+
+			$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
 			{
 				$m->to($user->email)->subject('Activate Your Account');
 			});
