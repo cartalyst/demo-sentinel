@@ -96,6 +96,7 @@
 
   <script type="text/javascript">
   	$('.tip').tooltip();
+  	//$('#modal').modal();
   </script>
 
   @yield('scripts')

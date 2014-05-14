@@ -81,6 +81,12 @@ body {
   text-align: center;
 }
 
+.list li {
+  padding:8px 0;
+  border-bottom:1px solid #ddd;
+  max-width: 800px;
+  margin:0 auto;
+}
 
 
 @media (min-width: 992px) {
