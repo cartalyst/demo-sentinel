@@ -40,6 +40,11 @@ class DemoInstallCommand extends Command {
 		$this->call('migrate');
 		$this->call('migrate:reset');
 		$this->call('migrate', ['--package' => 'cartalyst/sentry']);
+
+		if (file_exists($path = $this->laravel['path.storage'].'/logs/laravel.log'))
+		{
+			@unlink($path);
+		}
 	}
 
 	/**
