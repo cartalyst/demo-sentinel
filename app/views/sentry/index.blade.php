@@ -27,7 +27,7 @@
 		<li>Multiple login columns.</li>
 		<li>Inter-account throttling and improved DDoS protection.</li>
 		<li>Improved integration with Laravel (`Sentry::basic()`, easy email integration with queues).</li>
-		<li>Improved speed - make use of eager loading ~~and caching~~.</li>
+		<li>Improved speed - make use of eager loading.</li>
 		<li>Allow use of implementations (such as Eloquent and Kohana ORM) to take place on the ORM level, without bloating Sentry with abstractions never used by Sentry.</li>
 		<li>Add support for two factor authentication.</li>
 		<li>Allow more flexible activation scenarios.</li>
