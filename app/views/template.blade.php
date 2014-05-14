@@ -44,7 +44,7 @@
 							@if ( ! Sentry::check())
 							<li{{ Request::is('login') ? ' class="active"' : null }}><a href="{{ URL::to('login') }}">Login</a></li>
 							<li{{ Request::is('register') ? ' class="active"' : null }}><a href="{{ URL::to('register') }}">Register</a></li>
-							@else
+							@elseif (Sentry::hasAccess('admin'))
 							<li{{ Request::is('users*') ? ' class="active"' : null }}><a href="{{ URL::to('users') }}">Users</a></li>
 							<li{{ Request::is('groups*') ? ' class="active"' : null }}><a href="{{ URL::to('groups') }}">Groups</a></li>
 							@endif

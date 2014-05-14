@@ -21,7 +21,7 @@ Route::get('logout', function()
 	return Redirect::to('/');
 });
 
-Route::group(['prefix' => 'groups'], function()
+Route::group(['before' => 'auth.admin', 'prefix' => 'groups'], function()
 {
 	Route::get('/', 'GroupsController@index');
 	Route::get('create', 'GroupsController@create');
@@ -31,7 +31,7 @@ Route::group(['prefix' => 'groups'], function()
 	Route::get('{id}/delete', 'GroupsController@delete');
 });
 
-Route::group(['prefix' => 'users'], function()
+Route::group(['before' => 'auth.admin', 'prefix' => 'users'], function()
 {
 	Route::get('/', 'UsersController@index');
 	Route::get('create', 'UsersController@create');

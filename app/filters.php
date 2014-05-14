@@ -38,6 +38,13 @@ Route::filter('auth', function()
 	if (Auth::guest()) return Redirect::guest('login');
 });
 
+Route::filter('auth.admin', function()
+{
+	if (Sentry::check() && ! Sentry::hasAccess('admin'))
+	{
+		return Redirect::to('account')->withErrors(['Only admins can access this page.']);
+	}
+});
 
 Route::filter('auth.basic', function()
 {

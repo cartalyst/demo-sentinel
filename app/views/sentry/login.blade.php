@@ -10,6 +10,42 @@ Login
 	<h1>Login</h1>
 </div>
 
+<div class="row">
+	<div class="col-md-4 col-md-offset-4">
+
+		<div class="well">
+			<h3>Demo Users</h3>
+
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Email</th>
+						<th>Password</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>admin@example.com</td>
+						<td>password</td>
+					</tr>
+					<tr>
+						<td>demo1@example.com</td>
+						<td>demo123</td>
+					</tr>
+					<tr>
+						<td>demo2@example.com</td>
+						<td>demo123</td>
+					</tr>
+					<tr>
+						<td>demo3@example.com</td>
+						<td>demo123</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
 {{ Form::open(array('class' => 'form-horizontal', 'autocomplete' => 'off')) }}
 
 	<div class="form-group{{ $errors->has('email') ? ' has-error' : null }}">
