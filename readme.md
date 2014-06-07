@@ -26,7 +26,7 @@ composer install
 ##### 6. Run the migrations
 
 ```
-php artisan migrate --package="cartalyst/sentry"
+php artisan migrate --package="cartalyst/sentinel"
 ```
 
 ##### 7. Run the database seeder
@@ -38,5 +38,5 @@ php artisan db:seed
 ##### 8. Publish the package to app folder(app/config/packages), so that you can manage throttling or other settings
 
 ```
-php artisan config:publish cartalyst/sentry
+php artisan config:publish cartalyst/sentinel
 ```
