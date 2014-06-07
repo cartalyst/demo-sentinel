@@ -3,7 +3,7 @@
 @section('body')
 
 <div class="page-header">
-	<h1>Sentry 3</h1>
+	<h1>Sentinel</h1>
 	<p class="lead">A framework agnostic authorization and authentication package featuring groups, permissions, custom hashing algorithms and additional security features.</p>
 	<p  class="lead">This demo provides you a solid foundation of controllers and views for your next Application.</p>
 
@@ -17,7 +17,7 @@
 	<hr>
 	<h2>What's new</h2>
 
-	<p><b>Documentation for Sentry 3 is still in progress.</b></p>
+	<p><b>Documentation for Sentinel is still in progress.</b></p>
 
 	<ul class="list list-unstyled">
 		<li>Allow for custom hashing strategies.</li>
@@ -26,9 +26,9 @@
 		<li>Multiple sessions.</li>
 		<li>Multiple login columns.</li>
 		<li>Inter-account throttling and improved DDoS protection.</li>
-		<li>Improved integration with Laravel (Sentry::basic(), easy email integration with queues).</li>
+		<li>Improved integration with Laravel (Sentinel::basic(), easy email integration with queues).</li>
 		<li>Improved speed - make use of eager loading.</li>
-		<li>Allow use of implementations (such as Eloquent and Kohana ORM) to take place on the ORM level, without bloating Sentry with abstractions never used by Sentry.</li>
+		<li>Allow use of implementations (such as Eloquent and Kohana ORM) to take place on the ORM level, without bloating Sentinel with abstractions never used by Sentinel.</li>
 		<li>Add support for two factor authentication.</li>
 		<li>Allow more flexible activation scenarios.</li>
 	</ul>

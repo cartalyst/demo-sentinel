@@ -3,9 +3,9 @@
 class UsersController extends AuthorizedController {
 
 	/**
-	 * Holds the Sentry Users repository.
+	 * Holds the Sentinel Users repository.
 	 *
-	 * @var \Cartalyst\Sentry\Users\EloquentUser
+	 * @var \Cartalyst\Sentinel\Users\EloquentUser
 	 */
 	protected $users;
 
@@ -18,7 +18,7 @@ class UsersController extends AuthorizedController {
 	{
 		parent::__construct();
 
-		$this->users = Sentry::getUserRepository();
+		$this->users = Sentinel::getUserRepository();
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Sentry 3</title>
+	<title>Sentinel</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="{{ URL::to('assets/css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
 	<link href="{{ URL::to('assets/css/font-awesome.min.css') }}" rel="stylesheet" media="screen">
@@ -35,22 +35,22 @@
   					<span class="icon-bar"></span>
   					<span class="icon-bar"></span>
   				</button>
-  				<a class="navbar-brand" href="{{ URL::to('/') }}">Sentry 3</a>
+  				<a class="navbar-brand" href="{{ URL::to('/') }}">Sentinel</a>
   			</div>
 
   			<div class="collapse navbar-collapse navbar-ex1-collapse">
 
   				<ul class="nav navbar-nav">
   					<li{{ Request::is('/') ? ' class="active"' : null }}><a href="{{ URL::to('/') }}">Home</a></li>
-  					@if ( ! Sentry::check())
+  					@if ( ! Sentinel::check())
   					<li{{ Request::is('login') ? ' class="active"' : null }}><a href="{{ URL::to('login') }}">Login</a></li>
   					<li{{ Request::is('register') ? ' class="active"' : null }}><a href="{{ URL::to('register') }}">Register</a></li>
-  					@elseif (Sentry::hasAccess('admin'))
+  					@elseif (Sentinel::hasAccess('admin'))
   					<li{{ Request::is('users*') ? ' class="active"' : null }}><a href="{{ URL::to('users') }}">Users</a></li>
   					<li{{ Request::is('groups*') ? ' class="active"' : null }}><a href="{{ URL::to('groups') }}">Groups</a></li>
   					@endif
   				</ul>
-  				@if ($user = Sentry::check())
+  				@if ($user = Sentinel::check())
   				<ul class="nav navbar-nav pull-right">
   					<li{{ Request::is('account') ? ' class="active"' : null }}><a href="{{ URL::to('account') }}">Account
   					@if ( ! Activation::completed($user))

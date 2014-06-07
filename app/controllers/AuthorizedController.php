@@ -6,7 +6,7 @@ class AuthorizedController extends BaseController {
 	{
 		$this->beforeFilter('auth');
 
-		$this->user = Sentry::getUser();
+		$this->user = Sentinel::getUser();
 	}
 
 }

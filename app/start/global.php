@@ -47,13 +47,13 @@ Log::useFiles(storage_path().'/logs/laravel.log');
 |
 */
 
-App::error(function(Cartalyst\Sentry\Checkpoints\NotActivatedException $exception, $code)
+App::error(function(Cartalyst\Sentinel\Checkpoints\NotActivatedException $exception, $code)
 {
 	return Redirect::to('wait')
 		->withErrors($exception->getMessage());
 });
 
-App::error(function(Cartalyst\Sentry\Checkpoints\SwipeIdentityException $exception, $code)
+App::error(function(Cartalyst\Sentinel\Checkpoints\SwipeIdentityException $exception, $code)
 {
 	$code = $exception->getCode();
 	$response = $exception->getResponse();
@@ -89,7 +89,7 @@ App::error(function(Cartalyst\Sentry\Checkpoints\SwipeIdentityException $excepti
 	dd($message);
 });
 
-App::error(function(Cartalyst\Sentry\Checkpoints\ThrottlingException $exception, $code)
+App::error(function(Cartalyst\Sentinel\Checkpoints\ThrottlingException $exception, $code)
 {
 	$free = $exception->getFree()->format('d M, h:i:s a');
 

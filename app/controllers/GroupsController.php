@@ -3,9 +3,9 @@
 class GroupsController extends AuthorizedController {
 
 	/**
-	 * Holds the Sentry Groups repository.
+	 * Holds the Sentinel Groups repository.
 	 *
-	 * @var \Cartalyst\Sentry\Groups\EloquentGroup
+	 * @var \Cartalyst\Sentinel\Groups\EloquentGroup
 	 */
 	protected $groups;
 
@@ -18,7 +18,7 @@ class GroupsController extends AuthorizedController {
 	{
 		parent::__construct();
 
-		$this->groups = Sentry::getGroupRepository()->createModel();
+		$this->groups = Sentinel::getGroupRepository()->createModel();
 	}
 
 	/**

@@ -1,7 +1,7 @@
 <?php
 
-use Cartalyst\Sentry\Checkpoints\NotActivatedException;
-use Cartalyst\Sentry\Checkpoints\ThrottlingException;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 
 class AuthController extends BaseController {
 
@@ -40,7 +40,7 @@ class AuthController extends BaseController {
 
 			$remember = (bool) Input::get('remember', false);
 
-			if (Sentry::authenticate(Input::all(), $remember))
+			if (Sentinel::authenticate(Input::all(), $remember))
 			{
 				return Redirect::intended('account');
 			}
@@ -93,7 +93,7 @@ class AuthController extends BaseController {
 			return Redirect::back()->withInput()->withErrors($validator);
 		}
 
-		if ($user = Sentry::register($input))
+		if ($user = Sentinel::register($input))
 		{
 			$activation = Activation::create($user);
 

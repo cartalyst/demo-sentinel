@@ -15,14 +15,14 @@ class UsersTableSeeder extends Seeder {
 			]
 		];
 
-		$adminGroup = Sentry::getGroupRepository()->createModel()->fill($group)->save();
+		$adminGroup = Sentinel::getGroupRepository()->createModel()->fill($group)->save();
 
 		$subscribersGroup = [
 			'name' => 'Subscribers',
 			'slug' => 'subscribers',
 		];
 
-		Sentry::getGroupRepository()->createModel()->fill($subscribersGroup)->save();
+		Sentinel::getGroupRepository()->createModel()->fill($subscribersGroup)->save();
 
 		$admin = [
 			'email'    => 'admin@example.com',
@@ -48,12 +48,12 @@ class UsersTableSeeder extends Seeder {
 
 		];
 
-		$adminUser = Sentry::registerAndActivate($admin);
+		$adminUser = Sentinel::registerAndActivate($admin);
 		$adminUser->groups()->attach($adminGroup);
 
 		foreach ($users as $user)
 		{
-			Sentry::registerAndActivate($user);
+			Sentinel::registerAndActivate($user);
 		}
 	}
 

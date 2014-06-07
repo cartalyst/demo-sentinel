@@ -3,8 +3,14 @@
 	"description": "The Laravel Framework.",
 	"keywords": ["framework", "laravel"],
 	"license": "MIT",
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "http://packages.cartalyst.com"
+		}
+	],
 	"require": {
-		"cartalyst/sentry": "dev-develop",
+		"cartalyst/sentinel": "dev-master",
 		"laravel/framework": "4.1.*"
 	},
 	"autoload": {

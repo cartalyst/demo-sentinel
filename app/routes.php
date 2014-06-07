@@ -12,11 +12,11 @@
 */
 
 // Disable checkpoints (throttling, activation) for demo purposes
-Sentry::disableCheckpoints();
+Sentinel::disableCheckpoints();
 
 Route::get('logout', function()
 {
-	Sentry::logout();
+	Sentinel::logout();
 
 	return Redirect::to('/');
 });
@@ -43,7 +43,7 @@ Route::group(['before' => 'auth.admin', 'prefix' => 'users'], function()
 
 Route::get('/', function()
 {
-	if (Sentry::check())
+	if (Sentinel::check())
 	{
 		return Redirect::to('account');
 	}
@@ -64,7 +64,7 @@ Route::get('wait', function()
 
 Route::get('activate/{id}/{code}', function($id, $code)
 {
-	$user = Sentry::findById($id);
+	$user = Sentinel::findById($id);
 
 	if ( ! Activation::complete($user, $code))
 	{
@@ -77,7 +77,7 @@ Route::get('activate/{id}/{code}', function($id, $code)
 
 Route::get('reactivate', function()
 {
-	if ( ! $user = Sentry::check())
+	if ( ! $user = Sentinel::check())
 	{
 		return Redirect::to('login');
 	}
@@ -106,7 +106,7 @@ Route::get('reactivate', function()
 
 Route::get('deactivate', function()
 {
-	$user = Sentry::check();
+	$user = Sentinel::check();
 
 	Activation::remove($user);
 
@@ -135,7 +135,7 @@ Route::post('reset', function()
 
 	$email = Input::get('email');
 
-	$user = Sentry::findByCredentials(compact('email'));
+	$user = Sentinel::findByCredentials(compact('email'));
 
 	if ( ! $user)
 	{
@@ -164,7 +164,7 @@ Route::post('reset', function()
 
 Route::get('reset/{id}/{code}', function($id, $code)
 {
-	$user = Sentry::findById($id);
+	$user = Sentinel::findById($id);
 
 	return View::make('sentry.reset.complete');
 
@@ -185,7 +185,7 @@ Route::post('reset/{id}/{code}', function($id, $code)
 			->withErrors($validator);
 	}
 
-	$user = Sentry::findById($id);
+	$user = Sentinel::findById($id);
 
 	if ( ! $user)
 	{
@@ -209,16 +209,16 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 
 	Route::get('/', function()
 	{
-		$user = Sentry::getUser();
+		$user = Sentinel::getUser();
 
-		$persistence = Sentry::getPersistence();
+		$persistence = Sentinel::getPersistence();
 
 		return View::make('sentry.account.home', compact('user', 'persistence'));
 	});
 
 	Route::get('kill/{code}', function($code)
 	{
-		$user = Sentry::getUser();
+		$user = Sentinel::getUser();
 		$user->removePersistenceCode($code);
 		$user->save();
 
@@ -258,7 +258,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 		Session::reflash();
 
-		$user = Sentry::forceAuthenticateAndRemember(compact('email', 'password'));
+		$user = Sentinel::forceAuthenticateAndRemember(compact('email', 'password'));
 
 		if ( ! $user)
 		{
@@ -313,7 +313,7 @@ Route::group(['prefix' => 'swipe'], function()
 					->withErrors('Email or password have disappeared from the session.');
 			}
 
-			$user = Sentry::findByCredentials(compact('email', 'password'));
+			$user = Sentinel::findByCredentials(compact('email', 'password'));
 
 			if ( ! $user)
 			{
@@ -331,7 +331,7 @@ Route::group(['prefix' => 'swipe'], function()
 			}
 
 			// We should expect another exception
-			Sentry::forceAuthenticateAndRemember(compact('email', 'password'));
+			Sentinel::forceAuthenticateAndRemember(compact('email', 'password'));
 
 			// We should never get here
 			return Redirect::to('login')
@@ -379,7 +379,7 @@ Route::group(['prefix' => 'swipe'], function()
 					->withErrors('Email or password have disappeared from the session.');
 			}
 
-			$user = Sentry::findByCredentials(compact('email', 'password'));
+			$user = Sentinel::findByCredentials(compact('email', 'password'));
 
 			if ( ! $user)
 			{
@@ -390,7 +390,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 			$user = SwipeIdentity::checkAnswer($user, Input::get('code'), function($user)
 			{
-				return Sentry::forceAuthenticateAndRemember($user, (bool) Input::old('remember', false));
+				return Sentinel::forceAuthenticateAndRemember($user, (bool) Input::old('remember', false));
 			});
 
 			if ( ! $user)

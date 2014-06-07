@@ -40,7 +40,7 @@ Route::filter('auth', function()
 
 Route::filter('auth.admin', function()
 {
-	if (Sentry::check() && ! Sentry::hasAccess('admin'))
+	if (Sentinel::check() && ! Sentinel::hasAccess('admin'))
 	{
 		return Redirect::to('account')->withErrors(['Only admins can access this page.']);
 	}

@@ -1,6 +1,6 @@
-# Sentry 3 Demo
+# Sentinel Demo
 
-This is a basic demo showing some of the functionality of Sentry 3 on Laravel 4.1.
+This is a basic demo showing some of the functionality of Sentinel on Laravel 4.1.
 
 ## Installation
 

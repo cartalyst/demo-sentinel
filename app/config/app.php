@@ -107,7 +107,7 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 
-		'Cartalyst\Sentry\Laravel\SentryServiceProvider',
+		'Cartalyst\Sentinel\Laravel\SentinelServiceProvider',
 
 	),
 
@@ -175,11 +175,11 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
-		'Activation'    => 'Cartalyst\Sentry\Laravel\Facades\Activation',
-		'Auth'          => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
-		'Reminder'      => 'Cartalyst\Sentry\Laravel\Facades\Reminder',
-		'Sentry'        => 'Cartalyst\Sentry\Laravel\Facades\Sentry',
-		'SwipeIdentity' => 'Cartalyst\Sentry\Laravel\Facades\SwipeIdentity',
+		'Activation'      => 'Cartalyst\Sentinel\Laravel\Facades\Activation',
+		'Auth'            => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
+		'Reminder'        => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
+		'Sentinel'        => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
+		'SwipeIdentity'   => 'Cartalyst\Sentinel\Laravel\Facades\SwipeIdentity',
 
 	),
 
