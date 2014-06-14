@@ -30,7 +30,7 @@ class UsersController extends AuthorizedController {
 	{
 		$users = $this->users->createModel()->paginate();
 
-		return View::make('sentry.users.index', compact('users'));
+		return View::make('sentinel.users.index', compact('users'));
 	}
 
 	/**
@@ -114,7 +114,7 @@ class UsersController extends AuthorizedController {
 			$user = $this->users->createModel();
 		}
 
-		return View::make('sentry.users.form', compact('mode', 'user'));
+		return View::make('sentinel.users.form', compact('mode', 'user'));
 	}
 
 	/**

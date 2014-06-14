@@ -96,7 +96,7 @@ return array(
 	|
 	*/
 
-	'cookie' => 'demo_sentry_session',
+	'cookie' => 'demo_sentinel_session',
 
 	/*
 	|--------------------------------------------------------------------------

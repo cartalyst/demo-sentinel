@@ -12,7 +12,7 @@ class AuthController extends BaseController {
 	 */
 	public function login()
 	{
-		return View::make('sentry.login');
+		return View::make('sentinel.login');
 	}
 
 	/**
@@ -68,7 +68,7 @@ class AuthController extends BaseController {
 	 */
 	public function register()
 	{
-		return View::make('sentry.register');
+		return View::make('sentinel.register');
 	}
 
 	/**
@@ -99,7 +99,7 @@ class AuthController extends BaseController {
 
 			$code = $activation->code;
 
-			$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
+			$sent = Mail::send('sentinel.emails.activate', compact('user', 'code'), function($m) use ($user)
 			{
 				$m->to($user->email)->subject('Activate Your Account');
 			});

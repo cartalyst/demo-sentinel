@@ -62,7 +62,7 @@
   				@endif
 
   				<ul class="nav navbar-nav navbar-right">
-	  				<li><a href="https://cartalyst.com/manual/sentry">Manual</a></li>
+	  				<li><a href="https://cartalyst.com/manual/sentinel">Manual</a></li>
 	  			</ul>
 
   		</div>

@@ -7,7 +7,7 @@ This is a basic demo showing some of the functionality of Sentinel on Laravel 4.
 ##### 1. Clone this repo:
 
 ```
-git clone git@github.com:cartalyst/demo-sentry.git
+git clone git@github.com:cartalyst/demo-sentinel.git
 ```
 
 ##### 2. Setup your virtual host.

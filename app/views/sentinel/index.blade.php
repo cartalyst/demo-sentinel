@@ -8,11 +8,7 @@
 	<p  class="lead">This demo provides you a solid foundation of controllers and views for your next Application.</p>
 
 	<p>
-		<a href="https://github.com/cartalyst/demo-sentry" class="btn btn-lg btn-default"><i class="fa fa-github"></i> Github</a>
-		<button class="btn btn-default btn-lg" data-toggle="modal" data-target="#modal">
-			<i class="fa fa-heart"></i> Consider this
-		</button>
-
+		<a href="https://github.com/cartalyst/demo-sentinel" class="btn btn-lg btn-default"><i class="fa fa-github"></i> Github</a>
 	</p>
 	<hr>
 	<h2>What's new</h2>
@@ -33,20 +29,6 @@
 		<li>Allow more flexible activation scenarios.</li>
 	</ul>
 
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-			<p class="lead">Don’t be a mooch! Put in a pull request, help with documentation, or support the cause by subscribing to <a href="https://cartalyst.com">Cartalyst</a>.</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default btn-block" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-  </div>
 </div>
 
 @stop

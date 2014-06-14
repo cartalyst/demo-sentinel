@@ -30,7 +30,7 @@ class GroupsController extends AuthorizedController {
 	{
 		$groups = $this->groups->paginate();
 
-		return View::make('sentry.groups.index', compact('groups'));
+		return View::make('sentinel.groups.index', compact('groups'));
 	}
 
 	/**
@@ -114,7 +114,7 @@ class GroupsController extends AuthorizedController {
 			$group = $this->groups;
 		}
 
-		return View::make('sentry.groups.form', compact('mode', 'group'));
+		return View::make('sentinel.groups.form', compact('mode', 'group'));
 	}
 
 	/**

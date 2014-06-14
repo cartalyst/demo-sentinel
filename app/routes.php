@@ -48,7 +48,7 @@ Route::get('/', function()
 		return Redirect::to('account');
 	}
 
-	return View::make('sentry/index');
+	return View::make('sentinel.index');
 });
 
 Route::get('login', 'AuthController@login');
@@ -59,7 +59,7 @@ Route::post('register', 'AuthController@processRegistration');
 
 Route::get('wait', function()
 {
-	return View::make('sentry.wait');
+	return View::make('sentinel.wait');
 });
 
 Route::get('activate/{id}/{code}', function($id, $code)
@@ -91,7 +91,7 @@ Route::get('reactivate', function()
 
 	$code = $activation->code;
 
-	$sent = Mail::send('sentry.emails.activate', compact('user', 'code'), function($m) use ($user)
+	$sent = Mail::send('sentinel.emails.activate', compact('user', 'code'), function($m) use ($user)
 	{
 		$m->to($user->email)->subject('Activate Your Account');
 	});
@@ -115,7 +115,7 @@ Route::get('deactivate', function()
 
 Route::get('reset', function()
 {
-	return View::make('sentry.reset.begin');
+	return View::make('sentinel.reset.begin');
 });
 
 Route::post('reset', function()
@@ -148,7 +148,7 @@ Route::post('reset', function()
 
 	$code = $reminder->code;
 
-	$sent = Mail::send('sentry.emails.reminder', compact('user', 'code'), function($m) use ($user)
+	$sent = Mail::send('sentinel.emails.reminder', compact('user', 'code'), function($m) use ($user)
 	{
 		$m->to($user->email)->subject('Activate Your Account');
 	});
@@ -166,7 +166,7 @@ Route::get('reset/{id}/{code}', function($id, $code)
 {
 	$user = Sentinel::findById($id);
 
-	return View::make('sentry.reset.complete');
+	return View::make('sentinel.reset.complete');
 
 })->where('id', '\d+');
 
@@ -213,7 +213,7 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 
 		$persistence = Sentinel::getPersistence();
 
-		return View::make('sentry.account.home', compact('user', 'persistence'));
+		return View::make('sentinel.account.home', compact('user', 'persistence'));
 	});
 
 	Route::get('kill/{code}', function($code)
@@ -242,7 +242,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 		Session::reflash();
 
-		return View::make('sentry.swipe.register', compact('login', 'code'));
+		return View::make('sentinel.swipe.register', compact('login', 'code'));
 	});
 
 	Route::get('registered', function()
@@ -285,7 +285,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 			Session::reflash();
 
-			return View::make('sentry.swipe.sms.register');
+			return View::make('sentinel.swipe.sms.register');
 		});
 
 		Route::post('register', function()
@@ -351,7 +351,7 @@ Route::group(['prefix' => 'swipe'], function()
 
 			Session::reflash();
 
-			return View::make('sentry.swipe.sms.code');
+			return View::make('sentinel.swipe.sms.code');
 		});
 
 		Route::post('code', function()
