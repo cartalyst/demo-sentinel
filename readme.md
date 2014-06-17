@@ -12,7 +12,7 @@ git clone git@github.com:cartalyst/demo-sentinel.git
 
 ##### 2. Setup your virtual host.
 
-##### 3. Go into your app directory in your terminal and install the dependencies:
+##### 3. Go into your app directory in your terminal and install the dependencies: (cartalyst requires a <a href="https://cartalyst.com/pricing">subscription</a>)
 
 ```
 composer install
