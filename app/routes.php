@@ -229,11 +229,7 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 
 	Route::get('kill/{code}', function($code)
 	{
-		$user = Sentinel::getUser();
-
 		Sentinel::getPersistenceRepository()->remove($code);
-
-		$user->save();
 
 		return Redirect::back();
 	});
