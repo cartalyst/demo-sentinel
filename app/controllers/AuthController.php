@@ -119,7 +119,7 @@ class AuthController extends BaseController {
 			}
 
 			return Redirect::to('login')
-				->withSuccess('An activation email has been sent.')
+				->withSuccess('Your accout was successfully created. You might login now.')
 				->with('userId', $user->getUserId());
 		}
 
