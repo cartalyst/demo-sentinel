@@ -37,9 +37,17 @@ class DemoInstallCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('migrate');
-		$this->call('migrate:reset');
-		$this->call('migrate', ['--package' => 'cartalyst/sentinel', '--seed' => true]);
+		try
+		{
+			$this->call('migrate:install', ['--force' => true]);
+		}
+		catch (Exception $e) {
+
+		}
+
+		$this->call('migrate:reset', ['--force' => true]);
+		$this->call('migrate', ['--package' => 'cartalyst/sentinel', '--seed' => true, '--force' => true]);
+		$this->call('migrate', ['--force' => true]);
 
 		if (file_exists($path = $this->laravel['path.storage'].'/logs/laravel.log'))
 		{

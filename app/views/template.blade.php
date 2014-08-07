@@ -47,23 +47,20 @@
   					<li{{ Request::is('register') ? ' class="active"' : null }}><a href="{{ URL::to('register') }}">Register</a></li>
   					@elseif (Sentinel::hasAccess('admin'))
   					<li{{ Request::is('users*') ? ' class="active"' : null }}><a href="{{ URL::to('users') }}">Users</a></li>
-  					<li{{ Request::is('groups*') ? ' class="active"' : null }}><a href="{{ URL::to('groups') }}">Groups</a></li>
+  					<li{{ Request::is('roles*') ? ' class="active"' : null }}><a href="{{ URL::to('roles') }}">Roles</a></li>
   					@endif
   				</ul>
+          <ul class="nav navbar-nav pull-right">
+            <li><a href="https://cartalyst.com/manual/sentinel">Manual</a></li>
   				@if ($user = Sentinel::check())
-  				<ul class="nav navbar-nav pull-right">
   					<li{{ Request::is('account') ? ' class="active"' : null }}><a href="{{ URL::to('account') }}">Account
   					@if ( ! Activation::completed($user))
   					<span class="label label-danger">Inactive</span>
   					@endif
   				</a></li>
   				<li><a href="{{ URL::to('logout') }}">Logout</a></li>
-  				</ul>
   				@endif
-
-  				<ul class="nav navbar-nav navbar-right">
-	  				<li><a href="https://cartalyst.com/manual/sentinel">Manual</a></li>
-	  			</ul>
+          </ul>
 
   		</div>
   	</nav>

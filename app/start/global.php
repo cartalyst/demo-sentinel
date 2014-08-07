@@ -53,42 +53,6 @@ App::error(function(Cartalyst\Sentinel\Checkpoints\NotActivatedException $except
 		->withErrors($exception->getMessage());
 });
 
-App::error(function(Cartalyst\Sentinel\Checkpoints\SwipeIdentityException $exception, $code)
-{
-	$code = $exception->getCode();
-	$response = $exception->getResponse();
-	$user = $exception->getUser();
-
-	switch ($code)
-	{
-		case NEED_REGISTER_SMS:
-			return Redirect::to('swipe/sms/register')
-				->withInput();
-
-		case NEED_REGISTER_SWIPE:
-			return Redirect::to('swipe/register')
-				->withInput()
-				->with('swipe_login', $user->getUserLogin())
-				->with('swipe_code', $response->getUserSwipeActivationCode());
-
-		case RC_SWIPE_REJECTED:
-			return Redirect::to('login')
-				->withErrors('Swipe Identity authentication rejected by device.');
-			break;
-
-		case RC_SMS_DELIVERED:
-			return Redirect::to('swipe/sms/code')
-				->withInput();
-
-		case RC_ERROR:
-		case RC_APP_DOES_NOT_EXIST:
-			return Redirect::to('login')
-				->withErrors($e->getMessage());
-	}
-
-	dd($message);
-});
-
 App::error(function(Cartalyst\Sentinel\Checkpoints\ThrottlingException $exception, $code)
 {
 	$free = $exception->getFree()->format('d M, h:i:s a');

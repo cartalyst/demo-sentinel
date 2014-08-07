@@ -67,6 +67,8 @@ return array(
 
 	'key' => 'YourSecretKey!!!',
 
+	'cipher' => MCRYPT_RIJNDAEL_256,
+
 	/*
 	|--------------------------------------------------------------------------
 	| Autoloaded Service Providers
@@ -179,7 +181,6 @@ return array(
 		'Auth'            => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
 		'Reminder'        => 'Cartalyst\Sentinel\Laravel\Facades\Reminder',
 		'Sentinel'        => 'Cartalyst\Sentinel\Laravel\Facades\Sentinel',
-		'SwipeIdentity'   => 'Cartalyst\Sentinel\Laravel\Facades\SwipeIdentity',
 
 	),
 

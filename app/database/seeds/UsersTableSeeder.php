@@ -5,9 +5,9 @@ class UsersTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('users')->truncate();
-		DB::table('groups')->truncate();
+		DB::table('roles')->truncate();
 
-		$group = [
+		$role = [
 			'name' => 'Administrator',
 			'slug' => 'administrator',
 			'permissions' => [
@@ -15,14 +15,14 @@ class UsersTableSeeder extends Seeder {
 			]
 		];
 
-		$adminGroup = Sentinel::getGroupRepository()->createModel()->fill($group)->save();
+		$adminRole = Sentinel::getRoleRepository()->createModel()->fill($role)->save();
 
-		$subscribersGroup = [
+		$subscribersRole = [
 			'name' => 'Subscribers',
 			'slug' => 'subscribers',
 		];
 
-		Sentinel::getGroupRepository()->createModel()->fill($subscribersGroup)->save();
+		Sentinel::getRoleRepository()->createModel()->fill($subscribersRole)->save();
 
 		$admin = [
 			'email'    => 'admin@example.com',
@@ -49,7 +49,7 @@ class UsersTableSeeder extends Seeder {
 		];
 
 		$adminUser = Sentinel::registerAndActivate($admin);
-		$adminUser->groups()->attach($adminGroup);
+		$adminUser->roles()->attach($adminRole);
 
 		foreach ($users as $user)
 		{

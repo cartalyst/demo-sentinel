@@ -1,13 +1,13 @@
 <?php
 
-class GroupsController extends AuthorizedController {
+class RolesController extends AuthorizedController {
 
 	/**
-	 * Holds the Sentinel Groups repository.
+	 * Holds the Sentinel Roles repository.
 	 *
-	 * @var \Cartalyst\Sentinel\Groups\EloquentGroup
+	 * @var \Cartalyst\Sentinel\Roles\EloquentRole
 	 */
-	protected $groups;
+	protected $roles;
 
 	/**
 	 * Constructor.
@@ -18,23 +18,23 @@ class GroupsController extends AuthorizedController {
 	{
 		parent::__construct();
 
-		$this->groups = Sentinel::getGroupRepository()->createModel();
+		$this->roles = Sentinel::getRoleRepository()->createModel();
 	}
 
 	/**
-	 * Display a listing of groups.
+	 * Display a listing of roles.
 	 *
 	 * @return \Illuminate\View\View
 	 */
 	public function index()
 	{
-		$groups = $this->groups->paginate();
+		$roles = $this->roles->paginate();
 
-		return View::make('sentinel.groups.index', compact('groups'));
+		return View::make('sentinel.roles.index', compact('roles'));
 	}
 
 	/**
-	 * Show the form for creating new group.
+	 * Show the form for creating new role.
 	 *
 	 * @return \Illuminate\View\View
 	 */
@@ -44,7 +44,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Handle posting of the form for creating new group.
+	 * Handle posting of the form for creating new role.
 	 *
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
@@ -54,7 +54,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Show the form for updating group.
+	 * Show the form for updating role.
 	 *
 	 * @param  int  $id
 	 * @return mixed
@@ -65,7 +65,7 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Handle posting of the form for updating group.
+	 * Handle posting of the form for updating role.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
@@ -76,21 +76,21 @@ class GroupsController extends AuthorizedController {
 	}
 
 	/**
-	 * Remove the specified group.
+	 * Remove the specified role.
 	 *
 	 * @param  int  $id
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function delete($id)
 	{
-		if ($group = $this->groups->find($id))
+		if ($role = $this->roles->find($id))
 		{
-			$group->delete();
+			$role->delete();
 
-			return Redirect::to('groups');
+			return Redirect::to('roles');
 		}
 
-		return Redirect::to('groups');
+		return Redirect::to('roles');
 	}
 
 	/**
@@ -104,17 +104,17 @@ class GroupsController extends AuthorizedController {
 	{
 		if ($id)
 		{
-			if ( ! $group = $this->groups->find($id))
+			if ( ! $role = $this->roles->find($id))
 			{
-				return Redirect::to('groups');
+				return Redirect::to('roles');
 			}
 		}
 		else
 		{
-			$group = $this->groups;
+			$role = $this->roles;
 		}
 
-		return View::make('sentinel.groups.form', compact('mode', 'group'));
+		return View::make('sentinel.roles.form', compact('mode', 'role'));
 	}
 
 	/**
@@ -130,50 +130,50 @@ class GroupsController extends AuthorizedController {
 
 		$rules = [
 			'name' => 'required',
-			'slug' => 'required|unique:groups'
+			'slug' => 'required|unique:roles'
 		];
 
 		if ($id)
 		{
-			$group = $this->groups->find($id);
+			$role = $this->roles->find($id);
 
-			$rules['slug'] .= ",slug,{$group->slug},slug";
+			$rules['slug'] .= ",slug,{$role->slug},slug";
 
-			$messages = $this->validateGroup($input, $rules);
+			$messages = $this->validateRole($input, $rules);
 
 			if ($messages->isEmpty())
 			{
-				$group->fill($input);
+				$role->fill($input);
 
-				$group->save();
+				$role->save();
 			}
 		}
 		else
 		{
-			$messages = $this->validateGroup($input, $rules);
+			$messages = $this->validateRole($input, $rules);
 
 			if ($messages->isEmpty())
 			{
-				$group = $this->groups->create($input);
+				$role = $this->roles->create($input);
 			}
 		}
 
 		if ($messages->isEmpty())
 		{
-			return Redirect::to('groups');
+			return Redirect::to('roles');
 		}
 
 		return Redirect::back()->withInput()->withErrors($messages);
 	}
 
 	/**
-	 * Validates a group.
+	 * Validates a role.
 	 *
 	 * @param  array  $data
 	 * @param  mixed  $id
 	 * @return \Illuminate\Support\MessageBag
 	 */
-	protected function validateGroup($data, $rules)
+	protected function validateRole($data, $rules)
 	{
 		$validator = Validator::make($data, $rules);
 

@@ -1,16 +1,5 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the Closure to execute when that URI is requested.
-|
-*/
-
 // Disable checkpoints (throttling, activation) for demo purposes
 Sentinel::disableCheckpoints();
 
@@ -21,14 +10,14 @@ Route::get('logout', function()
 	return Redirect::to('/');
 });
 
-Route::group(['before' => 'auth.admin', 'prefix' => 'groups'], function()
+Route::group(['before' => 'auth.admin', 'prefix' => 'roles'], function()
 {
-	Route::get('/', 'GroupsController@index');
-	Route::get('create', 'GroupsController@create');
-	Route::post('create', 'GroupsController@store');
-	Route::get('{id}', 'GroupsController@edit');
-	Route::post('{id}', 'GroupsController@update');
-	Route::get('{id}/delete', 'GroupsController@delete');
+	Route::get('/', 'RolesController@index');
+	Route::get('create', 'RolesController@create');
+	Route::post('create', 'RolesController@store');
+	Route::get('{id}', 'RolesController@edit');
+	Route::post('{id}', 'RolesController@update');
+	Route::get('{id}/delete', 'RolesController@delete');
 });
 
 Route::group(['before' => 'auth.admin', 'prefix' => 'users'], function()
@@ -72,7 +61,8 @@ Route::get('activate/{id}/{code}', function($id, $code)
 			->withErrors('Invalid or expired activation code.');
 	}
 
-	return Redirect::to('login')->withSuccess('Account activated.');
+	return Redirect::to('login')
+		->withSuccess('Account activated.');
 })->where('id', '\d+');
 
 Route::get('reactivate', function()
@@ -89,19 +79,21 @@ Route::get('reactivate', function()
 	// receive in the activation email
 	Activation::complete($user, $activation->code);
 
-	$code = $activation->code;
+	// $code = $activation->code;
 
-	$sent = Mail::send('sentinel.emails.activate', compact('user', 'code'), function($m) use ($user)
-	{
-		$m->to($user->email)->subject('Activate Your Account');
-	});
+	// $sent = Mail::send('sentinel.emails.activate', compact('user', 'code'), function($m) use ($user)
+	// {
+	// 	$m->to($user->email)->subject('Activate Your Account');
+	// });
 
-	if ( ! $sent)
-	{
-		return Redirect::to('register')->withErrors('Failed to send activation email.');
-	}
+	// if ($sent === 0)
+	// {
+	// 	return Redirect::to('register')
+	// 		->withErrors('Failed to send activation email.');
+	// }
 
-	return Redirect::to('account');
+	return Redirect::to('account')
+		->withSuccess('Account activated.');
 })->where('id', '\d+');
 
 Route::get('deactivate', function()
@@ -110,7 +102,8 @@ Route::get('deactivate', function()
 
 	Activation::remove($user);
 
-	return Redirect::back();
+	return Redirect::back()
+		->withSuccess('Account deactivated.');
 });
 
 Route::get('reset', function()
@@ -144,20 +137,20 @@ Route::post('reset', function()
 			->withErrors('No user with that email address belongs in our system.');
 	}
 
-	$reminder = Reminder::exists($user) ?: Reminder::create($user);
+	// $reminder = Reminder::exists($user) ?: Reminder::create($user);
 
-	$code = $reminder->code;
+	// $code = $reminder->code;
 
-	$sent = Mail::send('sentinel.emails.reminder', compact('user', 'code'), function($m) use ($user)
-	{
-		$m->to($user->email)->subject('Activate Your Account');
-	});
+	// $sent = Mail::send('sentinel.emails.reminder', compact('user', 'code'), function($m) use ($user)
+	// {
+	// 	$m->to($user->email)->subject('Reset your account password.');
+	// });
 
-	if ( ! $sent)
-	{
-		return Redirect::to('register')
-			->withErrors('Failed to send reset password email.');
-	}
+	// if ($sent === 0)
+	// {
+	// 	return Redirect::to('register')
+	// 		->withErrors('Failed to send reset password email.');
+	// }
 
 	return Redirect::to('wait');
 });
@@ -200,8 +193,8 @@ Route::post('reset/{id}/{code}', function($id, $code)
 			->withErrors('Invalid or expired reset code.');
 	}
 
-	return Redirect::to('login')->withSuccess("Password Reset.");
-
+	return Redirect::to('login')
+		->withSuccess("Password Reset.");
 })->where('id', '\d+');
 
 Route::group(['prefix' => 'account', 'before' => 'auth'], function()
@@ -211,196 +204,38 @@ Route::group(['prefix' => 'account', 'before' => 'auth'], function()
 	{
 		$user = Sentinel::getUser();
 
-		$persistence = Sentinel::getPersistence();
+		$persistence = Sentinel::getPersistenceRepository();
 
 		return View::make('sentinel.account.home', compact('user', 'persistence'));
+	});
+
+	Route::get('kill', function()
+	{
+		$user = Sentinel::getUser();
+
+		Sentinel::getPersistenceRepository()->flush($user);
+
+		return Redirect::back();
+	});
+
+	Route::get('kill-all', function()
+	{
+		$user = Sentinel::getUser();
+
+		Sentinel::getPersistenceRepository()->flush($user, false);
+
+		return Redirect::back();
 	});
 
 	Route::get('kill/{code}', function($code)
 	{
 		$user = Sentinel::getUser();
-		$user->removePersistenceCode($code);
+
+		Sentinel::getPersistenceRepository()->remove($code);
+
 		$user->save();
 
 		return Redirect::back();
 	});
 
-});
-
-Route::group(['prefix' => 'swipe'], function()
-{
-	Route::get('register', function()
-	{
-		$login = Session::get('login');
-		$code = Session::get('code');
-
-		if ( ! $login or ! $code)
-		{
-			return Redirect::to('login')
-				->withErrors('Missing Swipe Identity swipe login or code.');
-		}
-
-		Session::reflash();
-
-		return View::make('sentinel.swipe.register', compact('login', 'code'));
-	});
-
-	Route::get('registered', function()
-	{
-		$email = Input::old('email');
-		$password = Input::old('password');
-
-		if ( ! $email or ! $password)
-		{
-			return Redirect::to('email')
-				->withErrors('Email or password have disappeared from the session.');
-		}
-
-		Session::reflash();
-
-		$user = Sentinel::forceAuthenticateAndRemember(compact('email', 'password'));
-
-		if ( ! $user)
-		{
-			return Redirect::to('login')
-				->withInput()
-				->withErrors('Login failed even after swipe was registered. Potential infinite loop.');
-		}
-
-		return Redirect::to('account');
-	});
-
-	Route::group(['prefix' => 'sms'], function()
-	{
-		Route::get('register', function()
-		{
-			$email = Input::old('email');
-			$password = Input::old('password');
-
-			if ( ! $email or ! $password)
-			{
-				return Redirect::to('login')
-					->withErrors('Email or password have disappeared from the session.');
-			}
-
-			Session::reflash();
-
-			return View::make('sentinel.swipe.sms.register');
-		});
-
-		Route::post('register', function()
-		{
-			$rules = [
-				'number' => 'required|regex:/^\+?\d+$/|confirmed',
-			];
-
-			$validator = Validator::make(Input::get(), $rules);
-
-			Session::reflash();
-
-			if ($validator->fails())
-			{
-				return Redirect::back()
-					->withErrors($validator);
-			}
-
-			$email = Input::old('email');
-			$password = Input::old('password');
-
-			if ( ! $email or ! $password)
-			{
-				return Redirect::to('login')
-					->withErrors('Email or password have disappeared from the session.');
-			}
-
-			$user = Sentinel::findByCredentials(compact('email', 'password'));
-
-			if ( ! $user)
-			{
-				return Redirect::to('login')
-					->withInput()
-					->withErrors('User in session does not exist.');
-			}
-
-			$response = SwipeIdentity::saveNumber($user, Input::get('number'));
-
-			if ( ! $response)
-			{
-				return Redirect::to('login')
-					->withErrors('Failed to send number to Swipe Identity.');
-			}
-
-			// We should expect another exception
-			Sentinel::forceAuthenticateAndRemember(compact('email', 'password'));
-
-			// We should never get here
-			return Redirect::to('login')
-				->withErrors('Something went wrong.');
-		});
-
-		Route::get('code', function()
-		{
-			$email = Input::old('email');
-			$password = Input::old('password');
-
-			if ( ! $email or ! $password)
-			{
-				return Redirect::to('login')
-					->withErrors('Email or password have disappeared from the session.');
-			}
-
-			Session::reflash();
-
-			return View::make('sentinel.swipe.sms.code');
-		});
-
-		Route::post('code', function()
-		{
-			$rules = [
-				'code' => 'required',
-			];
-
-			$validator = Validator::make(Input::get(), $rules);
-
-			Session::reflash();
-
-			if ($validator->fails())
-			{
-				return Redirect::back()
-					->withErrors($validator);
-			}
-
-			$email = Input::old('email');
-			$password = Input::old('password');
-
-			if ( ! $email or ! $password)
-			{
-				return Redirect::to('login')
-					->withErrors('Email or password have disappeared from the session.');
-			}
-
-			$user = Sentinel::findByCredentials(compact('email', 'password'));
-
-			if ( ! $user)
-			{
-				return Redirect::to('login')
-					->withInput()
-					->withErrors('User in session does not exist.');
-			}
-
-			$user = SwipeIdentity::checkAnswer($user, Input::get('code'), function($user)
-			{
-				return Sentinel::forceAuthenticateAndRemember($user, (bool) Input::old('remember', false));
-			});
-
-			if ( ! $user)
-			{
-				return Redirect::to('login')
-					->withInput()
-					->withErrors('Invalid code.');
-			}
-
-			return Redirect::to('account');
-		});
-	});
 });

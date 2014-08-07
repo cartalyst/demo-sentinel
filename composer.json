@@ -10,13 +10,15 @@
 		}
 	],
 	"require": {
-		"cartalyst/sentinel": "dev-master",
-		"laravel/framework": "4.1.*"
+		"laravel/framework": "4.2.*",
+		"cartalyst/sentinel": "~1.0",
+		"cbschuld/browser.php": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
 			"app/commands",
 			"app/controllers",
+			"app/models",
 			"app/database/migrations",
 			"app/database/seeds",
 			"app/tests/TestCase.php"
@@ -37,5 +39,6 @@
 	"config": {
 		"preferred-install": "dist"
 	},
+	"prefer-stable": true,
 	"minimum-stability": "dev"
 }

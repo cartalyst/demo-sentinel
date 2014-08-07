@@ -18,21 +18,30 @@ My Account
 			</h3>
 
 			<div class="list-group">
-				@foreach ($user->getPersistenceCodes() as $index => $code)
-					@if ($code == $persistence->check())
-						<a href="{{ URL::to("account/kill/{$code}") }}" class="list-group-item active">
-							Session #{{ $index + 1 }}
+				<a href="{{ URL::to('account/kill') }}" class="list-group-item">Kill all <small>(including my session)</small></a>
+				<a href="{{ URL::to('account/kill-all') }}" class="list-group-item">Kill all <small>(excluding my session)</small></a>
+			</div>
+
+			<div class="list-group">
+
+				@foreach ($user->persistences as $index => $p)
+					@if ($p->code === $persistence->check())
+						<a href="{{ URL::to("account/kill/{$p->code}") }}" class="list-group-item active">
+							{{ $p->created_at->format('F d, Y - h:ia') }}
+							<span class="label label-info">{{ $p->browser }}</span>
+							<span class="badge">{{ $p->last_used }}</span>
 							<span class="badge">You</span>
 						</a>
 					@else
-						<a href="{{ URL::to("account/kill/{$code}") }}" class="list-group-item">
-							Session #{{ $index + 1 }}
+						<a href="{{ URL::to("account/kill/{$p->code}") }}" class="list-group-item">
+							{{ $p->created_at->format('F d, Y - h:ia') }}
+							<span class="label label-info">{{ $p->browser }}</span>
+							<span class="badge">{{ $p->last_used }}</span>
 						</a>
 					@endif
 				@endforeach
 			</div>
 
-			{{ Carbon\Carbon::now() }}
 		</div>
 
 		<div class="col-md-6">

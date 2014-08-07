@@ -35,7 +35,9 @@ class AuthController extends BaseController {
 
 			if ($validator->fails())
 			{
-				return Redirect::back()->withInput()->withErrors($validator);
+				return Redirect::back()
+					->withInput()
+					->withErrors($validator);
 			}
 
 			$remember = (bool) Input::get('remember', false);
@@ -50,15 +52,19 @@ class AuthController extends BaseController {
 		catch (NotActivatedException $e)
 		{
 			$errors = 'Account is not activated!';
+
+			return Redirect::to('reactivate')->with('user', $e->getUser());
 		}
 		catch (ThrottlingException $e)
 		{
 			$delay = $e->getDelay();
 
-			$error = "Your account is blocked for {$delay} second(s).";
+			$errors = "Your account is blocked for {$delay} second(s).";
 		}
 
-		return Redirect::back()->withInput()->withErrors($errors);
+		return Redirect::back()
+			->withInput()
+			->withErrors($errors);
 	}
 
 	/**
@@ -90,7 +96,9 @@ class AuthController extends BaseController {
 
 		if ($validator->fails())
 		{
-			return Redirect::back()->withInput()->withErrors($validator);
+			return Redirect::back()
+				->withInput()
+				->withErrors($validator);
 		}
 
 		if ($user = Sentinel::register($input))
@@ -104,15 +112,20 @@ class AuthController extends BaseController {
 				$m->to($user->email)->subject('Activate Your Account');
 			});
 
-			if ( ! $sent)
+			if ($sent === 0)
 			{
-				return Redirect::to('register')->withErrors('Failed to send activation email.');
+				return Redirect::to('register')
+					->withErrors('Failed to send activation email.');
 			}
 
-			return Redirect::to("login")->withSuccess('An activation email has been sent.')->with('userId', $user->getUserId());
+			return Redirect::to('login')
+				->withSuccess('An activation email has been sent.')
+				->with('userId', $user->getUserId());
 		}
 
-		return Redirect::to('register')->withInput()->withErrors('Failed to register.');
+		return Redirect::to('register')
+			->withInput()
+			->withErrors('Failed to register.');
 	}
 
 }
