@@ -29,10 +29,10 @@ composer install
 php artisan migrate --package="cartalyst/sentinel"
 ```
 
-##### 7. Run the database seeder
+##### 7. Run the migration & database seeder
 
 ```
-php artisan db:seed
+php artisan migration --seed
 ```
 
 ##### 8. Publish the package to app folder(app/config/packages), so that you can manage throttling or other settings
