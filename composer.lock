@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "569f13924aedf7c8295c817454e99ee9",
+    "hash": "2f7b5e6eb9b69dc69288c3f2ad51af7a",
     "packages": [
         {
             "name": "cartalyst/sentinel",
@@ -1828,13 +1828,21 @@
             "time": "2014-07-28 13:20:46"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
-    "minimum-stability": "dev",
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
     "stability-flags": {
         "cbschuld/browser.php": 20
     },
-    "prefer-stable": true,
-    "platform": [],
-    "platform-dev": []
+    "prefer-stable": false,
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
