@@ -32,7 +32,7 @@ php artisan migrate --package="cartalyst/sentinel"
 ##### 7. Run the migration & database seeder
 
 ```
-php artisan migration --seed
+php artisan migrate --seed
 ```
 
 ##### 8. Publish the package to app folder(app/config/packages), so that you can manage throttling or other settings
