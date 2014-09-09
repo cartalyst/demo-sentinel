@@ -6,6 +6,7 @@ class UsersTableSeeder extends Seeder {
 	{
 		DB::table('users')->truncate();
 		DB::table('roles')->truncate();
+		DB::table('role_users')->truncate();
 
 		$role = [
 			'name' => 'Administrator',
