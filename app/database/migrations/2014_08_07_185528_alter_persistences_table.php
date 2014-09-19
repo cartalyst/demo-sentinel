@@ -14,9 +14,9 @@ class AlterPersistencesTable extends Migration {
 	{
 		Schema::table('persistences', function(Blueprint $table)
 		{
-			$table->string('version')->after('code');
-			$table->string('browser')->after('version');
-			$table->string('platform')->after('browser');
+			$table->string('version')->nullable()->after('code');
+			$table->string('browser')->nullable()->after('version');
+			$table->string('platform')->nullable()->after('browser');
 		});
 	}
 
